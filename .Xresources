@@ -1,0 +1,7 @@
+! colours
+#include ".config/zzz/dark_bg"
+
+urxvt*scrollBar_right: true
+
+! do not scroll w output
+urxvt*scrollTtyOutput: false

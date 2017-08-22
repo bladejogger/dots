@@ -1,0 +1,97 @@
+%% sharelatex.com for all the helps
+
+\documentclass{report}
+
+%% permits searching of ligatures
+\usepackage{cmap}
+
+%% forces roman numerals for section numbering
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\thesection.\Roman{subsection}}
+
+%% attempt to force desired spacing between elements in list
+\usepackage{enumitem}
+\setlist{nolistsep}
+%\setlength{\parskip}{1em}
+
+%% empty headers and footers save for page numeration, center of footer
+\pagestyle{plain}
+
+%% 8-bit encoding for accent marks in glyphs
+\usepackage[T1]{fontenc}
+
+%% to affect margins
+\usepackage[margin=0.75in]{geometry}
+
+%% to use images from folder within working directory 
+\usepackage{graphicx}
+\usepackage{float}
+\graphicspath{{Pictures/}}
+
+%% generate the 'lorem lipsum' filler text
+\usepackage{lipsum}
+%% control spacing between headers and their contents
+%% kills section numerals in document... needs fixing
+%% \usepackage{titlesec}
+%% use: \t.s.{\sec}{left}{stretch}{shrink}
+%% \titlespacing{\section}{30pt}{0pt}{0pt}
+%% \titlespacing{\subsection}{30pt}{0pt}{0pt}
+
+\title{Title: Report-Style}
+\author{Author}
+\date{DATE}
+
+\begin{document}
+
+\maketitle
+\clearpage %% clears buffer for next chunk to be on new page
+
+\tableofcontents
+\clearpage
+
+%% \section*{Project Goals}  <-- removes the numeral of the section as well as
+\section{Intro}
+\lipsum[1]
+
+\subsection{kitteh}
+\lipsum[2]
+
+\section{Setup}
+\begin{itemize}[topsep=-8pt, itemsep=0pt]
+\item this was step1
+\item this was step2
+\item this was step3
+\end{itemize}
+
+\section{Process}
+\lipsum[3]
+
+\section{Tests}
+\lipsum[4]
+\subsection{alfa}
+\lipsum[12]
+\subsection{brva}
+\lipsum[13]
+\subsection{chrl}
+\lipsum[14]
+
+\section{Graph of Results (or something)}
+\lipsum[5]
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{halbrid.png}
+    \caption{This is a caption}
+\end{figure}
+
+\section{Concerns}
+\lipsum[7]
+
+\section{Test Plan}
+\begin{itemize}[topsep=-8pt, itemsep=0pt]
+\item Test:
+    \lipsum[8]
+\end{itemize}
+
+\section{Conclusion}
+\lipsum[9]
+\end{document}

@@ -1,6 +1,12 @@
 ! colours
 #include ".config/zzz/dark_bg"
 
+! font
+urxvt*font: xft:DejaVuSansMono:pixelsize=13:antialias=true
+
+! see through
+urxvt*transparent: false
+
 urxvt*scrollBar_right: true
 
 ! do not scroll w output

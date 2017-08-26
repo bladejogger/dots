@@ -9,3 +9,7 @@ urxvt
 copy->paste
 highlight selection like a normal human being, (right click can be used to extend it), 
   in the desired area, press "ctrl + insert" to paste
+
+beep
+resolved under at least one scenario with:
+xset -b

@@ -24,3 +24,6 @@ alias lock='i3lock -i [path to image] -e -f'
 # history searching
 bindkey "^[[A" history-beginning-search-backward
 bindkey "^[[B" history-beginning-search-forward
+
+# delete key "fix"
+bindkey "\e[3~" delete-char

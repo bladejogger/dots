@@ -14,8 +14,12 @@ SAVEHIST=1000
 
 # aliases
 alias ls='ls --color'
-alias ll='ls -lFA --color'
+alias ll='ls -lFA'
 alias grep='grep --color'
+alias chrome='(chromium --incognito &)'
+alias doc='(libreoffice &)'
+alias redo='sudo !!'
+alias lock='i3lock -i [path to image] -e -f'
 
 # history searching
 bindkey "^[[A" history-beginning-search-backward

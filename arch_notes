@@ -1,15 +1,19 @@
 'config' file goes in ~/.config/<here>
-'light_bg' and 'dark_bg' should be placed in ~/.config/<here> for cleanliness:
-    ensure they are called correctly by .Xresources
+  'light_bg' and 'dark_bg' should be placed in ~/.config/<here> for cleanliness:
+  ensure they are called correctly by .Xresources
 
 when making changes to .Xresources, run this to load them:
-xrdb -merge .Xresources
+  xrdb -merge .Xresources
 
 urxvt
 copy->paste
-highlight selection like a normal human being, (right click can be used to extend it), 
+  highlight selection like a normal human being, (right click can be used to extend it), 
   in the desired area, press "ctrl + insert" to paste
 
 beep
-resolved under at least one scenario with:
-xset -b
+  resolved under at least one scenario with:
+  xset -b
+
+git
+  set your 'git clone' project to be pushed with ssh:
+  git remote set-url origin git@github.com/<user>/<project>.git

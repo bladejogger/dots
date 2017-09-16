@@ -24,7 +24,6 @@ if [ -f "$usermodmap" ]; then
 fi
 
 # start some nice programs
-
 if [ -d /etc/X11/xinit/xinitrc.d ] ; then
  for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
   [ -x "$f" ] && . "$f"
@@ -32,10 +31,15 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
  unset f
 fi
 
-feh --bg-scale /home/dave/PICTURES/grey_burn.jpg
+# map CapsLK to Esc
+if [ -f ~/.Xmodmap ]; then
+    xmodmap ~/.Xmodmap
+fi
+
+feh --bg-scale path_to_image.jpg
 i3
 
-# defaults of some kind? maybe good if i3 breaks some day..
+# defaults of some kind? maybe good if something breaks some day..
 #twm &
 #xclock -geometry 50x50-1+1 &
 #urxvt -geometry 80x50+494+51 &

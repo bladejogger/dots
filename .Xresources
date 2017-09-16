@@ -1,6 +1,9 @@
 ! colours
 #include ".config/zzz/dark_bg"
 
+! $TERM
+urxvt*termName: xterm-256color
+
 ! font
 urxvt*font: xft:DejaVuSansMono:pixelsize=13:antialias=true
 
@@ -11,3 +14,4 @@ urxvt*scrollBar_right: true
 
 ! do not scroll w output
 urxvt*scrollTtyOutput: false
+urxvt*scrollStyle: xterm

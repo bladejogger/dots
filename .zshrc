@@ -9,8 +9,8 @@ setopt APPEND_HISTORY
 setopt SHARE_HISTORY
 #
 HISTFILE=$HOME/.zsh_history
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=2500
+SAVEHIST=2500
 
 # aliases
 alias ls='ls --color'
@@ -20,6 +20,7 @@ alias chrome='(chromium --incognito &)'
 alias doc='(libreoffice &)'
 alias redo='sudo !!'
 alias lock='i3lock -i [path to image] -e -f'
+alias office='(libreoffice &)'
 
 # history searching
 bindkey "^[[A" history-beginning-search-backward

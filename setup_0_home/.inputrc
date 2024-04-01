@@ -1,2 +1,3 @@
+# history searching file for Bash
 "\e[A":history-search-backward
 "\e[B":history-search-forward

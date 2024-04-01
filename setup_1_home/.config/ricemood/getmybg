@@ -1,0 +1,7 @@
+import re
+#path = '/home/$USER/Pictures/old_wallpapers/foam_sea.png'
+#fout = open(path).read()
+#
+#wall = re.search("--bg[-\w]+ '(.*?)'", fout)
+wall = open('/home/$USER/Pictures/kneeling_against_hotel_chair.jpg').read()
+print(wall.group(1))

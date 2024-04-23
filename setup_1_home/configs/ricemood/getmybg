@@ -1,7 +1,0 @@
-import re
-#path = '/home/$USER/Pictures/pic.png'
-#fout = open(path).read()
-#
-#wall = re.search("--bg[-\w]+ '(.*?)'", fout)
-wall = open('/home/$USER/Pictures/pic.jpg').read()
-print(wall.group(1))

@@ -13,9 +13,9 @@ set -e
 
 apt_array = ("cmake" "feh" "ffmpeg" "flatpak" "gimp" "git" "htop" "i3" \
     "i3blocks" "libreoffice" "imagemagick" "mat2" "nautilus" "ncal" \
-    "neofetch" "nmap" "pavucontrol" "pinta" "python3-pip" "python3-venv" \
-    "ranger" "rxvt-unicode" "scrot" "testdisk" "texlive-latex-extra" \
-    "tree" "vim" "vlc" "xchm" "zathura" "zsh")
+    "neofetch" "nmap" "npm" "pavucontrol" "pinta" "python3-pip" \
+    "python3-venv" "ranger" "rxvt-unicode" "scrot" "testdisk"
+    "texlive-latex-extra" "tree" "vim" "vlc" "xchm" "zathura" "zsh")
 
 pip_array = ("build" "setuptools" "wheel")
 
@@ -56,7 +56,7 @@ apt_stoof() {
 pip_stoof() {
     python3 -m pip install --upgrade
     echo "[ ] installing pip array"
-    if python3 -m pip install 0U ${pip_array[@]}; then
+    if python3 -m pip install -U ${pip_array[@]}; then
         echo "[+] pip array installed"
     else
         echo "[-] failed pip array"
@@ -66,12 +66,46 @@ pip_stoof() {
 }
 
 config_stoof() {
-    echo "[ ] cloning ricemood"
-    git clone https://github.com/f0x48/ricemood.git
-    echo "[+] ricemood cloned"
+    CONFIG_DIR_0="$PWD"/configs
+    CONFIG_DIR_1="$PWD"/configs/config
+    CONFIG_DIR_2="$HOME"./config
+    CONFIG_DIR_3="$HOME"./config/ricemood
+    echo "[ ] installing ricemood"
+    #git clone https://github.com/f0x48/ricemood.git
+    npm install -g "$PWD"/ricemood_git_repo
+    echo "[+] ricemood installed"
 
+    echo "[ ] normalizing zsh"
     chsh -s $(which zsh)
+    cp "$CONFIG_DIR_0"/zshrc.conf "$CONFIG_DIR_2"/zshrc.conf
+    echo "[+] zsh normalized"
 
+    echo "[ ] same w/ i3"
+    cp "$CONFIG_DIR_0"/i3.conf "$CONFIG_DIR_2"/i3.conf
+    echo "[+] i3 dunskis"
+
+    echo "[ ] moving i3blocks..."
+    cp -r "$CONFIG_DIR_1"/i3blocks "$CONFIG_DIR_2"
+    echo "[+] i3blocks moved"
+
+    echo "[ ] moving ranger"
+    chmod u+x "$CONFIG_DIR_1"/ranger/scope.sh
+    cp -r "$CONFIG_DIR_1"/ranger "$CONFIG_DIR_2"
+    echo "[+] ranger moved"
+
+    echo "[ ] moving vim templates and conf"
+    cp -r "$CONFIG_DIR_1"/vim "$CONFIG_DIR_2"
+    cp $"CONFIG_DIR_0"/vimrc.conf "$HOME"
+    echo "[+] vim templates and conf moved"
+
+    echo "[ ] setting up X crap"
+    cp "$CONFIG_DIR_0"/xinitrc.conf "$HOME"
+    cp "$CONFIG_DIR_0"/xprofile.conf "$HOME"
+    cp "$CONFIG_DIR_0"/xserverrc.conf "$HOME"
+    echo "[+] X crap set"
+}
+
+git_stoof() {
     read -p "git name? (Enter to skip) " git_name
     read -p "git email? (Enter to skip) " git_email
     if [ "" == "$git_name" ]; then
@@ -82,10 +116,6 @@ config_stoof() {
         exit
     fi
 
-    # chmod +x ranger/scope.sh
-}
-
-git_stoof() {
     git config --global user.username $git_name
     git config --global user.email $git_email
 
@@ -100,12 +130,22 @@ git_stoof() {
         %C(white)%s%C(reset) %C(dim white) - %an%C(reset)%C(auto)%d%C(reset)' --all
 }
 
+scripts_on() {
+    SCRIPTS_DIR="$PWD"/scripts
+    for $i in $"SCRIPTS_DIR";
+        do
+            chmod u+x $i
+        done
+
+}
+
 menu() {
     echo "fresh setup"
     echo "[1] apt"
     echo "[2] pip"
     echo "[3] confs"
-    echo "[4] 0, 1, 2"
+    echo "[4] git"
+    echo "[5] 1, 2, 3, 4"
     echo "[0] exit"
 }
 

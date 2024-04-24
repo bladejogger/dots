@@ -12,9 +12,9 @@ set -e
 # set -n
 
 apt_array = ("cmake" "feh" "ffmpeg" "flatpak" "gimp" "git" "htop" "i3" \
-    "i3blocks" "libreoffice" "imagemagick" "mat2" "nautilus" "ncal" \
+    "i3blocks" "iw" "libreoffice" "imagemagick" "mat2" "nautilus" "ncal" \
     "neofetch" "nmap" "npm" "pavucontrol" "pinta" "python3-pip" \
-    "python3-venv" "ranger" "rxvt-unicode" "scrot" "testdisk"
+    "python3-venv" "ranger" "rsync" "rxvt-unicode" "scrot" "testdisk" \
     "texlive-latex-extra" "tree" "vim" "vlc" "xchm" "zathura" "zsh")
 
 pip_array = ("build" "setuptools" "wheel")

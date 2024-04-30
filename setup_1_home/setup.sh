@@ -11,13 +11,15 @@ set -e
 # check syntax but don't execute
 # set -n
 
-apt_array = ("cmake" "feh" "ffmpeg" "flatpak" "gimp" "git" "htop" "i3" \
-    "i3blocks" "iw" "libreoffice" "imagemagick" "mat2" "nautilus" "ncal" \
-    "neofetch" "nmap" "npm" "pavucontrol" "pinta" "python3-pip" \
-    "python3-venv" "ranger" "rsync" "rxvt-unicode" "scrot" "testdisk" \
-    "texlive-latex-extra" "tree" "vim" "vlc" "xchm" "zathura" "zsh")
+extra_array=("cifs-utils")
 
-pip_array = ("build" "setuptools" "wheel")
+apt_array=("cmake" "feh" "ffmpeg" "flatpak" "gimp" "git" "htop" "i3" \
+    "i3blocks" "iw" "libreoffice" "imagemagick" "lm-sensors" "mat2" \
+    "nautilus" "ncal" "neofetch" "nmap" "npm" "pavucontrol" "pinta" \
+    "python3-pip" "python3-venv" "ranger" "rsync" "rxvt-unicode" "scrot" \
+    "testdisk" "texlive-latex-extra" "tree" "vim" "vlc" "xchm" "zathura" "zsh")
+
+pip_array=("build" "setuptools" "wheel")
 
 apt_stoof() {
     echo "[ ] updating apt"
@@ -48,7 +50,7 @@ apt_stoof() {
             echo "[+] extras removed"
             ;;
         *)
-            echo "[ ] extras remain"
+            echo "[ ] extras ignored"
             ;;
     esac
 }
@@ -80,29 +82,29 @@ config_stoof() {
     cp "$CONFIG_DIR_0"/zshrc.conf "$CONFIG_DIR_2"/zshrc.conf
     echo "[+] zsh normalized"
 
-    echo "[ ] same w/ i3"
+    echo "[ ] moving i3 conf"
     cp "$CONFIG_DIR_0"/i3.conf "$CONFIG_DIR_2"/i3.conf
-    echo "[+] i3 dunskis"
+    echo "[+] i3 conf moved"
 
     echo "[ ] moving i3blocks..."
     cp -r "$CONFIG_DIR_1"/i3blocks "$CONFIG_DIR_2"
     echo "[+] i3blocks moved"
 
-    echo "[ ] moving ranger"
+    echo "[ ] moving ranger confs"
     chmod u+x "$CONFIG_DIR_1"/ranger/scope.sh
     cp -r "$CONFIG_DIR_1"/ranger "$CONFIG_DIR_2"
-    echo "[+] ranger moved"
+    echo "[+] ranger confs moved"
 
     echo "[ ] moving vim templates and conf"
     cp -r "$CONFIG_DIR_1"/vim "$CONFIG_DIR_2"
     cp $"CONFIG_DIR_0"/vimrc.conf "$HOME"
     echo "[+] vim templates and conf moved"
 
-    echo "[ ] setting up X crap"
+    echo "[ ] moving X confs"
     cp "$CONFIG_DIR_0"/xinitrc.conf "$HOME"
     cp "$CONFIG_DIR_0"/xprofile.conf "$HOME"
     cp "$CONFIG_DIR_0"/xserverrc.conf "$HOME"
-    echo "[+] X crap set"
+    echo "[+] X confs moved"
 }
 
 git_stoof() {
@@ -132,7 +134,7 @@ git_stoof() {
 
 scripts_on() {
     SCRIPTS_DIR="$PWD"/scripts
-    for $i in $"SCRIPTS_DIR";
+    for $i in "$SCRIPTS_DIR";
         do
             chmod u+x $i
         done
@@ -141,40 +143,46 @@ scripts_on() {
 
 menu() {
     echo "fresh setup"
-    echo "[1] apt"
-    echo "[2] pip"
-    echo "[3] confs"
-    echo "[4] git"
+    echo "[1] apt update and array install"
+    echo "[2] pip update and array install"
+    echo "[3] confs put into place"
+    echo "[4] git name and email set"
     echo "[5] 1, 2, 3, 4"
     echo "[0] exit"
 }
 
-menu()
+menu
 
 while read -p "> " user_in;
-do
-    echo ""
-    case $user_in in
-        "1")
-            apt_stoof()
-            ;;
-        "2")
-            pip_stoof()
-            ;;
-        "3")
-            config_stoof()
-            ;;
-        "4")
-            apt_stoof()
-            pip_stoof()
-            config_stoof()
-            ;;
-        "0")
-            echo "goodbye"
-            exit
-        *)
-            ;;
-    esac
-    echo ""
-    menu()
-done
+    do
+        echo ""
+        case "$user_in" in
+            "1")
+                apt_stoof
+                ;;
+            "2")
+                pip_stoof
+                ;;
+            "3")
+                config_stoof
+                ;;
+            "4")
+                git_stoof
+                ;;
+            "5")
+                apt_stoof
+                pip_stoof
+                config_stoof
+                ;;
+            "0")
+                echo "goodbye"
+                exit
+                ;;
+            *)
+                echo "invalid input"
+                exit
+                ;;
+        esac
+        echo ""
+        menu
+    done

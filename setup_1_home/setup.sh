@@ -11,15 +11,14 @@ set -e
 # check syntax but don't execute
 # set -n
 
-extra_array=("cifs-utils")
+declare -a extra_array=("cifs-utils")
 
-apt_array=("cmake" "feh" "ffmpeg" "flatpak" "gimp" "git" "htop" "i3" \
-    "i3blocks" "iw" "libreoffice" "imagemagick" "lm-sensors" "mat2" \
-    "nautilus" "ncal" "neofetch" "nmap" "npm" "pavucontrol" "pinta" \
-    "python3-pip" "python3-venv" "ranger" "rsync" "rxvt-unicode" "scrot" \
+declare -a apt_array=("cmake" "feh" "ffmpeg" "flatpak" "gimp" "git" "htop" "i3" "i3blocks" "iw" \
+    "libreoffice" "imagemagick" "lm-sensors" "mat2" "nautilus" "ncal" "neofetch" "nmap" "npm" \
+    "pavucontrol" "pinta" "python3-pip" "python3-venv" "ranger" "rsync" "rxvt-unicode" "scrot" \
     "testdisk" "texlive-latex-extra" "tree" "vim" "vlc" "xchm" "zathura" "zsh")
 
-pip_array=("build" "setuptools" "wheel")
+declare -a pip_array=("build" "setuptools" "wheel")
 
 apt_stoof() {
     echo "[ ] updating apt"
@@ -37,20 +36,21 @@ apt_stoof() {
         done
     echo ""
     if sudo apt install -y "$packages"; then
+        echo "[+] apt array: $packages"
         echo "[+] apt array installed"
     else
         echo "[-] failed apt array installation"
         exit
     fi
 
-    read -p "[y/N] autoremove packages? " autorem
-    case "$autorem" in
+    read -p "[y/N] autoremove packages? " autorem_flag
+    case "$autorem_flag" in
         [yY]|[yY][eE][sS])
             sudo apt autoremove -y
-            echo "[+] extras removed"
+            echo "[+] extra packages removed"
             ;;
         *)
-            echo "[ ] extras ignored"
+            echo "[ ] extras packages ignored"
             ;;
     esac
 }
@@ -64,47 +64,57 @@ pip_stoof() {
         echo "[-] failed pip array"
         exit
     fi
-
 }
 
+declare -a repo_home_dir_files=("vim" "vimrc.conf" "xinitrc.conf" \
+    "xprofile.conf" "serverrc.conf")
+
+declare -a repo_home_config_dir_dirs=("i3blocks" "ranger" "ricemood")
+
 config_stoof() {
-    CONFIG_DIR_0="$PWD"/configs
-    CONFIG_DIR_1="$PWD"/configs/config
-    CONFIG_DIR_2="$HOME"./config
-    CONFIG_DIR_3="$HOME"./config/ricemood
+    echo "--------------------------"
+    echo "[ ] beginning configuration"
+
+    REPO_CONFIG_DIR_0="$PWD"/configs/home_dir_configs
+    REPO_CONFIG_DIR_1="$PWD"/configs/home_config_dir_configs
+    LOCAL_CONFIG_DIR="$HOME"./config
+
     echo "[ ] installing ricemood"
-    #git clone https://github.com/f0x48/ricemood.git
-    npm install -g "$PWD"/ricemood_git_repo
-    echo "[+] ricemood installed"
+    if npm install -g "$PWD"/ricemood_git_repo; then
+        echo "[+] ricemood installed"
+        echo "[ ]"
+    else
+        echo "[-] failed ricemood installation"
+        exit
+    fi
 
     echo "[ ] normalizing zsh"
-    chsh -s $(which zsh)
-    cp "$CONFIG_DIR_0"/zshrc.conf "$CONFIG_DIR_2"/zshrc.conf
-    echo "[+] zsh normalized"
+    if chsh -s $(which zsh); then
+        echo "[+] zsh normalized"
+        echo "[ ]"
+    else
+        echo "[-] failed to use zsh"
+        exit
+    fi
 
-    echo "[ ] moving i3 conf"
-    cp "$CONFIG_DIR_0"/i3.conf "$CONFIG_DIR_2"/i3.conf
-    echo "[+] i3 conf moved"
+    echo "[ ] moving X files and vim to $HOME"
+    for i in ${repo_home_dir_files[@]};
+    do
+        cp -r "$REPO_CONFIG_DIR_0"/"$i" "$HOME"
+    done
+    echo "[+] moved X files and vim to $HOME"
 
-    echo "[ ] moving i3blocks..."
-    cp -r "$CONFIG_DIR_1"/i3blocks "$CONFIG_DIR_2"
-    echo "[+] i3blocks moved"
+    echo "[ ] moving config dirs to $HOME"
+    chmod u+x "$REPO_CONFIG_DIR_1"/ranger/scope.sh
+    for j in ${repo_home_config_dir_dirs[@]};
+    do
+        cp -r "$REPO_CONFIG_DIR_1"/"$j" "$HOME"
+    done
+    echo "[+] moved config dirs to $HOME"
 
-    echo "[ ] moving ranger confs"
-    chmod u+x "$CONFIG_DIR_1"/ranger/scope.sh
-    cp -r "$CONFIG_DIR_1"/ranger "$CONFIG_DIR_2"
-    echo "[+] ranger confs moved"
-
-    echo "[ ] moving vim templates and conf"
-    cp -r "$CONFIG_DIR_1"/vim "$CONFIG_DIR_2"
-    cp $"CONFIG_DIR_0"/vimrc.conf "$HOME"
-    echo "[+] vim templates and conf moved"
-
-    echo "[ ] moving X confs"
-    cp "$CONFIG_DIR_0"/xinitrc.conf "$HOME"
-    cp "$CONFIG_DIR_0"/xprofile.conf "$HOME"
-    cp "$CONFIG_DIR_0"/xserverrc.conf "$HOME"
-    echo "[+] X confs moved"
+    echo "[ ]"
+    echo "[+] configuration complete"
+    echo "--------------------------"
 }
 
 git_stoof() {
@@ -133,12 +143,17 @@ git_stoof() {
 }
 
 scripts_on() {
+    echo "[ ] chmod'ing scripts"
     SCRIPTS_DIR="$PWD"/scripts
     for $i in "$SCRIPTS_DIR";
         do
             chmod u+x $i
         done
+    echo "[+] scripts chmod'ed"
 
+    echo "[ ] mv'ing scripts"
+    cp -r "$SCRIPTS_DIR" "$HOME"
+    echo "[+] scripts mov'ed"
 }
 
 menu() {
@@ -147,7 +162,8 @@ menu() {
     echo "[2] pip update and array install"
     echo "[3] confs put into place"
     echo "[4] git name and email set"
-    echo "[5] 1, 2, 3, 4"
+    echo "[5] scripts put into place"
+    echo "[6] 1-5, inclusive"
     echo "[0] exit"
 }
 
@@ -170,9 +186,14 @@ while read -p "> " user_in;
                 git_stoof
                 ;;
             "5")
+                script_stoof
+                ;;
+            "6")
                 apt_stoof
                 pip_stoof
                 config_stoof
+                git_stoof
+                script_stoof
                 ;;
             "0")
                 echo "goodbye"
